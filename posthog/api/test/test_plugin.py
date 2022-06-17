@@ -304,11 +304,13 @@ class TestPluginAPI(APIBaseTest):
             },
         )
         self.assertEqual(Plugin.objects.count(), 1)
-        self.assertEqual(mock_reload.call_count, 1)
+        # no need to reload as the plugin couldn't have been enabled yet
+        self.assertEqual(mock_reload.call_count, 0)
 
         self.client.delete("/api/organizations/@current/plugins/{}".format(response.json()["id"]))
         self.assertEqual(Plugin.objects.count(), 0)
-        self.assertEqual(mock_reload.call_count, 2)
+        # reload is not needed, but the signal receiver doesn't check for plugin configs, so reloading just in case
+        self.assertEqual(mock_reload.call_count, 1)
 
     def test_create_plugin_commit_url(self, mock_get, mock_reload):
         self.assertEqual(mock_reload.call_count, 0)
@@ -339,7 +341,8 @@ class TestPluginAPI(APIBaseTest):
             },
         )
         self.assertEqual(Plugin.objects.count(), 1)
-        self.assertEqual(mock_reload.call_count, 1)
+        # no need to reload as the plugin couldn't have been enabled yet
+        self.assertEqual(mock_reload.call_count, 0)
 
     def test_create_plugin_other_commit_url(self, mock_get, mock_reload):
         self.assertEqual(mock_reload.call_count, 0)
@@ -375,7 +378,8 @@ class TestPluginAPI(APIBaseTest):
             },
         )
         self.assertEqual(Plugin.objects.count(), 1)
-        self.assertEqual(mock_reload.call_count, 1)
+        # no need to reload as the plugin couldn't have been enabled yet
+        self.assertEqual(mock_reload.call_count, 0)
 
     def test_create_plugin_version_range_eq_current(self, mock_get, mock_reload):
         with self.settings(MULTI_TENANCY=False):
@@ -467,7 +471,8 @@ class TestPluginAPI(APIBaseTest):
             "/api/organizations/@current/plugins/", {"plugin_type": "source", "name": "myplugin_original",},
         )
         plugin_id = response.json()["id"]
-        self.assertEqual(mock_reload.call_count, 1)
+        # no need to reload as the plugin couldn't have been enabled yet
+        self.assertEqual(mock_reload.call_count, 0)
 
         # There is no actual source code stored yet
         response = self.client.get(f"/api/organizations/@current/plugins/{plugin_id}/source")
@@ -482,7 +487,7 @@ class TestPluginAPI(APIBaseTest):
         )
         self.assertEqual(response.json(), {"index.ts": "'hello world'", "plugin.json": '{"name":"my plugin"}'})
         self.assertEqual(Plugin.objects.get(pk=plugin_id).name, "my plugin")
-        self.assertEqual(mock_reload.call_count, 2)
+        self.assertEqual(mock_reload.call_count, 1)
 
         # Modifying just one file will not alter the other
         response = self.client.patch(
@@ -491,7 +496,7 @@ class TestPluginAPI(APIBaseTest):
             content_type="application/json",
         )
         self.assertEqual(response.json(), {"index.ts": "'hello again'", "plugin.json": '{"name":"my plugin"}'})
-        self.assertEqual(mock_reload.call_count, 3)
+        self.assertEqual(mock_reload.call_count, 2)
 
         # Deleting a file by passing `None`
         response = self.client.patch(
@@ -500,7 +505,7 @@ class TestPluginAPI(APIBaseTest):
             content_type="application/json",
         )
         self.assertEqual(response.json(), {"plugin.json": '{"name":"my plugin"}'})
-        self.assertEqual(mock_reload.call_count, 4)
+        self.assertEqual(mock_reload.call_count, 3)
 
     def test_create_plugin_frontend_source(self, mock_get, mock_reload):
         self.assertEqual(mock_reload.call_count, 0)
@@ -529,7 +534,8 @@ class TestPluginAPI(APIBaseTest):
             },
         )
         self.assertEqual(Plugin.objects.count(), 1)
-        self.assertEqual(mock_reload.call_count, 1)
+        # no need to reload as the plugin couldn't have been enabled yet
+        self.assertEqual(mock_reload.call_count, 0)
 
         response = self.client.patch(
             f"/api/organizations/@current/plugins/{id}/update_source", {"frontend.tsx": "export const scene = {}",},
@@ -537,7 +543,7 @@ class TestPluginAPI(APIBaseTest):
 
         self.assertEqual(Plugin.objects.count(), 1)
         self.assertEqual(PluginSourceFile.objects.count(), 1)
-        self.assertEqual(mock_reload.call_count, 2)
+        self.assertEqual(mock_reload.call_count, 1)
 
         plugin = Plugin.objects.get(pk=id)
         plugin_config = PluginConfig.objects.create(plugin=plugin, team=self.team, enabled=True, order=1)
@@ -998,7 +1004,8 @@ class TestPluginAPI(APIBaseTest):
         response = self.client.post(
             "/api/organizations/@current/plugins/", {"url": "https://github.com/PostHog/helloworldplugin"}
         )
-        self.assertEqual(mock_reload.call_count, 1)
+        # no need to reload as the plugin couldn't have been enabled yet
+        self.assertEqual(mock_reload.call_count, 0)
 
         plugin_id = response.json()["id"]
         plugin = Plugin.objects.get(id=plugin_id)
@@ -1013,7 +1020,7 @@ class TestPluginAPI(APIBaseTest):
             self.assertEqual(plugin.latest_tag_checked_at, fake_date)
 
             # make sure we didn't emit a signal to reload plugins again
-            self.assertEqual(mock_reload.call_count, 1)
+            self.assertEqual(mock_reload.call_count, 0)
 
 
 class TestPluginsAccessLevelAPI(APIBaseTest):
