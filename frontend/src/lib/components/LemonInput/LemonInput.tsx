@@ -15,8 +15,8 @@ export interface LemonInputProps
     value?: string | number
     defaultValue?: string
     placeholder?: string
-    onChange?: (newValue: string) => void
-    onPressEnter?: (newValue: string) => void
+    onChange?: (newValue: string | number) => void
+    onPressEnter?: (newValue: string | number) => void
     /** An embedded input has no border around it and no background. This way it blends better into other components. */
     embedded?: boolean
     /** Whether there should be a clear icon to the right allowing you to reset the input. The `suffix` prop will be ignored if clearing is allowed. */
