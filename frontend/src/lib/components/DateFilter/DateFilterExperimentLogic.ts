@@ -1,4 +1,4 @@
-import { dayjs } from 'lib/dayjs'
+import { dayjs, Dayjs } from 'lib/dayjs'
 import { kea } from 'kea'
 import type { dateFilterLogicType } from './DateFilterExperimentLogicType'
 import { isDate, dateFilterToText } from 'lib/utils'
@@ -7,8 +7,8 @@ import { dateMappingOption } from '~/types'
 export type DateFilterLogicPropsType = {
     defaultValue: string
     onChange?: (fromDate: string, toDate: string) => void
-    dateFrom?: dayjs.Dayjs | string | null
-    dateTo?: dayjs.Dayjs | string | null
+    dateFrom?: Dayjs | string | null
+    dateTo?: Dayjs | string | null
     dateOptions?: Record<string, dateMappingOption>
     isDateFormatted?: boolean
 }
@@ -21,8 +21,8 @@ export const dateFilterLogic = kea<dateFilterLogicType>({
         close: true,
         openDateRange: true,
         setDate: (dateFrom: string, dateTo: string) => ({ dateFrom, dateTo }),
-        setRangeDateFrom: (range: dayjs.Dayjs | string | undefined | null) => ({ range }),
-        setRangeDateTo: (range: dayjs.Dayjs | string | undefined | null) => ({ range }),
+        setRangeDateFrom: (range: Dayjs | string | undefined | null) => ({ range }),
+        setRangeDateTo: (range: Dayjs | string | undefined | null) => ({ range }),
         setCurrentKey: (key: string) => ({ key }),
     },
     defaults: ({ props }) => ({
@@ -48,7 +48,7 @@ export const dateFilterLogic = kea<dateFilterLogicType>({
         rangeDateFrom: [
             props.dateFrom && isDate.test(props.dateFrom as string)
                 ? dayjs(props.dateFrom)
-                : (undefined as dayjs.Dayjs | string | undefined | null),
+                : (undefined as Dayjs | string | undefined | null),
             {
                 setRangeDateFrom: (_, { range }) => range,
                 openDateRange: () => null,
@@ -57,7 +57,7 @@ export const dateFilterLogic = kea<dateFilterLogicType>({
         rangeDateTo: [
             props.dateTo && isDate.test(props.dateTo as string)
                 ? dayjs(props.dateTo)
-                : (dayjs().format('YYYY-MM-DD') as dayjs.Dayjs | string | undefined | null),
+                : (dayjs().format('YYYY-MM-DD') as Dayjs | string | undefined | null),
             {
                 setRangeDateTo: (_, { range }) => range,
                 openDateRange: () => dayjs().format('YYYY-MM-DD'),
