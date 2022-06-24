@@ -400,7 +400,7 @@ export function SavedInsights(): JSX.Element {
                             </Col>
                             <Col>
                                 Last modified:
-                                {dateFilterExperiment && (
+                                {dateFilterExperiment ? (
                                     <DateFilterExperiment
                                         style={{ paddingLeft: 8 }}
                                         defaultValue="All time"
@@ -419,8 +419,7 @@ export function SavedInsights(): JSX.Element {
                                             </>
                                         )}
                                     />
-                                )}
-                                {!dateFilterExperiment && (
+                                ) : (
                                     <DateFilter
                                         style={{ paddingLeft: 8 }}
                                         defaultValue="All time"

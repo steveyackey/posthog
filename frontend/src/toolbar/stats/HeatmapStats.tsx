@@ -31,7 +31,7 @@ export function HeatmapStats(): JSX.Element {
                         <div style={{ color: '#888' }}>Use * as a wildcard</div>
                     </div>
                     <div style={{ marginBottom: 10 }} className="flex-center">
-                        {dateFilterExperiment && (
+                        {dateFilterExperiment ? (
                             <DateFilterExperiment
                                 defaultValue="Last 7 days"
                                 dateFrom={heatmapFilter.date_from}
@@ -39,8 +39,7 @@ export function HeatmapStats(): JSX.Element {
                                 onChange={(date_from, date_to) => setHeatmapFilter({ date_from, date_to })}
                                 getPopupContainer={getShadowRootPopupContainer}
                             />
-                        )}
-                        {!dateFilterExperiment && (
+                        ) : (
                             <DateFilter
                                 defaultValue="Last 7 days"
                                 dateFrom={heatmapFilter.date_from}

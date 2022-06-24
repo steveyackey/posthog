@@ -116,7 +116,7 @@ function DashboardScene(): JSX.Element {
                         <div className="flex pb border-bottom space-x">
                             <div className="flex-grow flex" style={{ height: 30 }}>
                                 <TZIndicator style={{ marginRight: 8, fontWeight: 'bold', lineHeight: '30px' }} />
-                                {dateFilterExperiment && (
+                                {dateFilterExperiment ? (
                                     <DateFilterExperiment
                                         defaultValue="Custom"
                                         showCustom
@@ -131,8 +131,7 @@ function DashboardScene(): JSX.Element {
                                             </>
                                         )}
                                     />
-                                )}
-                                {!dateFilterExperiment && (
+                                ) : (
                                     <DateFilter
                                         defaultValue="Custom"
                                         showCustom

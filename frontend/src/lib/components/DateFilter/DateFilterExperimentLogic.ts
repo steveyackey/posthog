@@ -4,7 +4,7 @@ import type { dateFilterLogicType } from './DateFilterExperimentLogicType'
 import { isDate, dateFilterToText } from 'lib/utils'
 import { dateMappingOption } from '~/types'
 
-type DateFilterLogicPropsType = {
+export type DateFilterLogicPropsType = {
     defaultValue: string
     onChange?: (fromDate: string, toDate: string) => void
     dateFrom?: dayjs.Dayjs | string | null
@@ -72,7 +72,7 @@ export const dateFilterLogic = kea<dateFilterLogicType>({
     }),
     listeners: ({ props }) => ({
         setDate: ({ dateFrom, dateTo }) => {
-            props.onChange(dateFrom, dateTo)
+            props.onChange && props.onChange(dateFrom, dateTo)
         },
     }),
     events: ({ actions }) => ({

@@ -178,7 +178,7 @@ export function SessionRecordingsTable({ personUUID, isPersonPage = false }: Ses
 
                 <Row className="time-filter-row">
                     <Row className="time-filter">
-                        {dateFilterExperiment && (
+                        {dateFilterExperiment ? (
                             <DateFilterExperiment
                                 makeLabel={(key) => (
                                     <>
@@ -201,8 +201,7 @@ export function SessionRecordingsTable({ personUUID, isPersonPage = false }: Ses
                                     'Last 21 days': { values: ['-21d'] },
                                 }}
                             />
-                        )}
-                        {!dateFilterExperiment && (
+                        ) : (
                             <DateFilter
                                 makeLabel={(key) => (
                                     <>
