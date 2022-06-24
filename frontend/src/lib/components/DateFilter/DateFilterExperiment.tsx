@@ -99,7 +99,7 @@ export function DateFilterExperiment({
 
         const clickInDateDropdown = event
             .composedPath?.()
-            ?.find((e) => (e as HTMLElement)?.matches?.('.date-options-selector-popup'))
+            ?.find((e) => (e as HTMLElement)?.matches?.('.rolling-date-range-options-selector-popup'))
 
         const isNotDateOptionsSelector =
             !showRollingRangePicker || (isOpen && showRollingRangePicker && !clickInDateDropdown)

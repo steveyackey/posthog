@@ -40,6 +40,7 @@ export function RollingDateRangeFilter({ onChange, makeLabel }: RollingDateRange
         <Tooltip title={makeLabel ? makeLabel(formattedDate) : undefined}>
             <div
                 className="custom-range-button rolling-date-range-filter"
+                data-attr="rolling-date-range-filter"
                 onClick={(): void => onChange && onChange(dateFrom, dateTo)}
             >
                 <p className="label">In the last</p>
