@@ -85,7 +85,7 @@ export function RollingDateRangeFilter({ onChange, makeLabel }: RollingDateRange
                     dropdownMatchSelectWidth={false}
                     options={dateOptions}
                     type="stealth"
-                    popupClassName="date-options-selector-popup"
+                    popupClassName="rolling-date-range-options-selector-popup"
                     outlined
                     size="small"
                 />
