@@ -41,7 +41,7 @@ python manage.py migrate_clickhouse
 
 ## parallel block
 python manage.py setup_dev &
-yarn add cypress@10.0.3 cypress-terminal-report@3.5.2 & wait
+yarn add cypress@10.2.0 cypress-terminal-report@4.0.1 & wait
 
 ## parallel block
 ./bin/plugin-server &
