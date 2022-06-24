@@ -150,7 +150,7 @@ describe('Insights', () => {
             cy.get('[data-attr=date-filter]').click()
             cy.get('[data-attr=rolling-date-range-input]').type('{selectall}1{enter}')
             cy.get('[data-attr=rolling-date-range-date-options-selector]').click()
-            cy.get('.date-options-selector-popup > div').contains('days').should('exist').click()
+            cy.get('.rolling-date-range-options-selector-popup > div').contains('days').should('exist').click()
             cy.get('.rolling-date-range-filter > .label').should('contain', 'In the last').click()
 
             // Test that the button shows the correct formatted range
