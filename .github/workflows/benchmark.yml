@@ -31,29 +31,6 @@ jobs:
             SECRET_KEY: '6b01eee4f945ca25045b5aab440b953461faf08693a9abbf1166dc7c6b9772da' # unsafe - for testing only
             BENCHMARK: '1'
 
-        services:
-            postgres:
-                image: postgres:12
-                env:
-                    POSTGRES_USER: posthog
-                    POSTGRES_PASSWORD: posthog
-                    POSTGRES_DB: posthog_test
-                ports:
-                    # Maps port 5432 on service container to the host
-                    # Needed because `postgres` host is not discoverable for some reason
-                    - 5432:5432
-                options: --health-cmd pg_isready --health-interval 10s --health-timeout 5s --health-retries 5
-            redis:
-                image: redis:6.2.7-alpine
-                ports:
-                    # Maps port 6379 on service container to the host
-                    # Needed because `redis` host is not discoverable for some reason
-                    - 6379:6379
-                options: >-
-                    --health-cmd "redis-cli ping"
-                    --health-interval 10s
-                    --health-timeout 5s
-                    --health-retries 5
         steps:
             - uses: actions/checkout@v2
               with:
@@ -67,7 +44,12 @@ jobs:
                   repository: PostHog/benchmark-results
                   token: ${{ secrets.POSTHOG_BOT_GITHUB_TOKEN }}
 
-            - name: Set up Python 3.8.12
+            - name: Stop/Start stack with Docker Compose
+              run: |
+                  docker-compose -f docker-compose.dev.yml down
+                  docker-compose -f docker-compose.dev.yml up -d
+
+            - name: Set up Python
               uses: actions/setup-python@v2
               with:
                   python-version: 3.8.12
